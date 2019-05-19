@@ -13,8 +13,8 @@ const createId = (): string => (
 );
 
 class App extends React.Component<{}, IState> {
-  constructor() {
-    super({});
+  constructor(props = {}) {
+    super(props);
     
     this.state = {
       todoCollection: [
@@ -22,13 +22,17 @@ class App extends React.Component<{}, IState> {
         {id: createId(), text: 'Build react demo'},
         {id: createId(), text: 'Take rest'}
       ]
-    }
+    };
   }
+  
+  onAdd = (value: string) => {
+    console.log(value);
+  };
   
   render () {
     return (
       <div className="App">
-        <Header/>
+        <Header onAdd={this.onAdd}/>
         <TodoList todoCollection={this.state.todoCollection}/>
       </div>
     );
