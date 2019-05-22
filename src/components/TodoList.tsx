@@ -4,14 +4,15 @@ import {ITodo} from '../models/ITodo';
 
 interface IProps  {
   todoCollection: any
+  onCompletedToggle: any
 }
 
-const TodoList: React.FC<IProps> = ({todoCollection}) => {
+const TodoList: React.FC<IProps> = ({todoCollection, onCompletedToggle}) => {
   return (
     <ul>
       {todoCollection.map((todo: ITodo) =>
         <li key={todo.id}>
-          <Todo text={todo.text}/>
+          <Todo id={todo.id} text={todo.text} completed={todo.completed} onCompletedToggle={onCompletedToggle}/>
         </li>
       )}
     </ul>
