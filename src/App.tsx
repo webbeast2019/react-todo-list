@@ -4,7 +4,13 @@ import Header from './components/Header';
 import TodoList from './components/TodoList';
 import {ITodo} from './models/ITodo';
 
+export enum ViewFilterMode {
+  All = 0,
+  Completed
+}
+
 interface IState {
+  viewFilter: ViewFilterMode,
   todoCollection: Array<ITodo>
 }
 
@@ -17,6 +23,7 @@ class App extends React.Component<{}, IState> {
     super(props);
     
     this.state = {
+      viewFilter: ViewFilterMode.All,
       todoCollection: [
         {id: createId(), completed: true, text: 'Call Benny'},
         {id: createId(), completed: false, text: 'Build react demo'},
@@ -24,6 +31,12 @@ class App extends React.Component<{}, IState> {
       ]
     };
   }
+  
+  onViewFilterChange = (newValue: ViewFilterMode) => {
+    this.setState({
+      viewFilter: newValue as ViewFilterMode
+    })
+  };
   
   onAdd = (value: string) => {
     const newTodo = {id: createId(), completed: false, text: value};
@@ -46,11 +59,29 @@ class App extends React.Component<{}, IState> {
     })
   };
   
+  // get date after filter (if needed)
+  getTodoListWithFilter(): Array<ITodo> {
+    let todoList = this.state.todoCollection;
+    
+    switch ((this.state.viewFilter)) {
+      case ViewFilterMode.All:
+        break;
+      
+      case ViewFilterMode.Completed:
+        todoList = this.state.todoCollection.filter((todo: ITodo) => todo.completed);
+        break;
+      
+      default:
+        break;
+    }
+    return todoList;
+  }
+  
   render() {
     return (
       <div className="App">
-        <Header onAdd={this.onAdd}/>
-        <TodoList todoCollection={this.state.todoCollection} onCompletedToggle={this.onCompletedToggle}/>
+        <Header onAdd={this.onAdd} onViewFilterChange={this.onViewFilterChange}/>
+        <TodoList todoCollection={this.getTodoListWithFilter()} onCompletedToggle={this.onCompletedToggle}/>
       </div>
     );
   }

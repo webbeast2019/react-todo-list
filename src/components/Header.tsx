@@ -1,11 +1,14 @@
 import React, {SyntheticEvent} from 'react';
+import {ViewFilterMode} from '../App';
 
 interface IProps {
   onAdd: Function
+  onViewFilterChange: Function
 }
 
 interface IState {
   value: string
+  viewFilterValue: ViewFilterMode
   buttonEnabled: boolean
 }
 
@@ -14,9 +17,19 @@ class Header extends React.Component<IProps, IState> {
     super(props);
     this.state = {
       value: '',
+      viewFilterValue: ViewFilterMode.All,
       buttonEnabled: false
     };
   }
+  
+  handleViewChange = (event: SyntheticEvent) => {
+    const value = parseInt((event.target as HTMLSelectElement).value);
+    this.setState({
+      viewFilterValue: value as unknown as ViewFilterMode
+    });
+    this.props.onViewFilterChange(value);
+  };
+  
   
   handleChange = (event: SyntheticEvent) => {
     const value = (event.target as HTMLInputElement).value;
@@ -40,6 +53,14 @@ class Header extends React.Component<IProps, IState> {
         <button onClick={this.handleClick}
                 disabled={!this.state.buttonEnabled}>Add
         </button>
+        
+        <div>
+          <p>View Filter</p>
+          <select value={this.state.viewFilterValue} onChange={this.handleViewChange}>
+            <option value={ViewFilterMode.All}>All</option>
+            <option value={ViewFilterMode.Completed}>Completed</option>
+          </select>
+        </div>
       </header>
     )
   }
