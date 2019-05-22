@@ -1,4 +1,4 @@
-import React, {MouseEvent, SyntheticEvent} from 'react';
+import React, {SyntheticEvent} from 'react';
 
 interface IProps {
   onAdd: Function
@@ -26,9 +26,8 @@ class Header extends React.Component<IProps, IState> {
     });
   };
   
-  handleClick = (event: MouseEvent<HTMLButtonElement>) => {
-    event.preventDefault();
-    if(this.state.buttonEnabled) {
+  handleClick = () => {
+    if (this.state.buttonEnabled) {
       this.props.onAdd(this.state.value)
     }
   };
@@ -39,7 +38,8 @@ class Header extends React.Component<IProps, IState> {
         <h1>My Todo list</h1>
         <input value={this.state.value} onChange={this.handleChange}/>
         <button onClick={this.handleClick}
-                disabled={!this.state.buttonEnabled}>Add</button>
+                disabled={!this.state.buttonEnabled}>Add
+        </button>
       </header>
     )
   }
