@@ -1,48 +1,49 @@
-import React, {SyntheticEvent} from 'react';
+import React, {SyntheticEvent, useState} from 'react';
 
 interface IProps {
   onAdd: Function
 }
 
-interface IState {
-  value: string
-  buttonEnabled: boolean
-}
+// this.state = {
+//   value: '',
+//   buttonEnabled: false
+// };
 
-class Header extends React.Component<IProps, IState> {
-  constructor(props: IProps) {
-    super(props);
-    this.state = {
-      value: '',
-      buttonEnabled: false
-    };
-  }
+// const handleChange = (event: SyntheticEvent) => {
+//   const value = (event.target as HTMLInputElement).value;
+//   this.setState({
+//     value,
+//     buttonEnabled: (value.length > 0)
+//   });
+// };
+
+// class Header extends React.Component<IProps, IState> {
+const Header: React.FC<IProps> = ({onAdd}) => {
+  const [value, setValue] = useState('');
+  const [buttonEnabled, setButtonEnabled] = useState(false);
   
-  handleChange = (event: SyntheticEvent) => {
-    const value = (event.target as HTMLInputElement).value;
-    this.setState({
-      value,
-      buttonEnabled: (value.length > 0)
-    });
+  const handleChange = (event: SyntheticEvent) => {
+    const newValue = (event.target as HTMLInputElement).value;
+    console.log(newValue);
+    setValue(newValue);
+    setButtonEnabled(newValue.length > 0);
   };
   
-  handleClick = () => {
-    if (this.state.buttonEnabled) {
-      this.props.onAdd(this.state.value)
+  const handleClick = () => {
+    if (buttonEnabled) {
+      onAdd(value);
     }
   };
   
-  render(): React.ReactElement {
-    return (
-      <header>
-        <h1>My Todo list</h1>
-        <input value={this.state.value} onChange={this.handleChange}/>
-        <button onClick={this.handleClick}
-                disabled={!this.state.buttonEnabled}>Add
-        </button>
-      </header>
-    )
-  }
-}
+  return (
+    <header>
+      <h1>My Todo list</h1>
+      <input value={value} onChange={handleChange}/>
+      <button onClick={handleClick}
+              disabled={!buttonEnabled}>Add
+      </button>
+    </header>
+  )
+};
 
 export default Header;
